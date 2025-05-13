@@ -46,3 +46,4 @@ resource sqlAdminPasswordSecret 'Microsoft.KeyVault/vaults/secrets@2019-09-01' =
 // Output the secret IDs for SQL Admin Login and Password
 output sqlAdminLoginSecretId string = sqlAdminLoginSecret.id
 output sqlAdminPasswordSecretId string = sqlAdminPasswordSecret.id
+                                                              
