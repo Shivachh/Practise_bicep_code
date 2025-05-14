@@ -1,13 +1,12 @@
 using 'main.bicep'
 
+
 param environmentName = 'dev'
 param solutionName = 'toyhrApp'
 
 param sqlDatabaseSku = {
-  sku: {
-    name: 'S1'
-    tier: 'Standard'
-  }
+  name: 'S1'
+  tier: 'Standard'
 }
 
 @secure()

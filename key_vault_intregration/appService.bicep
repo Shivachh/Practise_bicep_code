@@ -1,6 +1,6 @@
 param location string
 
-@description('The name of the environment. This must be dev, test, or prod.')
+@description('The name of the environment')
 param environmentName string
 
 param solutionName string

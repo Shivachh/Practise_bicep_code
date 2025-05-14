@@ -10,7 +10,7 @@ param sqlAdminPassword string
 
 var keyVaultName = '${environmentName}-${solutionName}-kv'
 
-resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
   name: keyVaultName
   location: location
   properties: {
@@ -22,28 +22,37 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
     enabledForTemplateDeployment: true
     enableSoftDelete: true
     softDeleteRetentionInDays: 90
+    accessPolicies: [
+      {
+        tenantId: subscription().tenantId
+        objectId: '00000000-0000-0000-0000-000000000000' // Replace with your deployment identity's objectId
+        permissions: {
+          secrets: [
+            'get'
+            'list'
+            'set'
+          ]
+        }
+      }
+    ]
   }
 }
 
-// Create the secret for SQL Admin Login
-resource sqlAdminLoginSecret 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
-  name: 'sqlAdminLogin'
+resource sqlAdminLoginSecret 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   parent: keyVault
+  name: 'sqlAdminLogin'
   properties: {
     value: sqlAdminLogin
   }
 }
 
-// Create the secret for SQL Admin Password
-resource sqlAdminPasswordSecret 'Microsoft.KeyVault/vaults/secrets@2019-09-01' = {
-  name: 'sqlAdminPassword'
+resource sqlAdminPasswordSecret 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   parent: keyVault
+  name: 'sqlAdminPassword'
   properties: {
     value: sqlAdminPassword
   }
 }
 
-// Output the secret IDs for SQL Admin Login and Password
 output sqlAdminLoginSecretId string = sqlAdminLoginSecret.id
 output sqlAdminPasswordSecretId string = sqlAdminPasswordSecret.id
-                                                              
